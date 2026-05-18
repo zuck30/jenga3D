@@ -74,9 +74,12 @@ export const useStore = create<AppState>()(
         { id: 'epsilon-vanquisher', title: 'ε Vanquisher', description: 'Eliminate epsilon transitions', unlockedAt: null },
       ],
       challenges: [
-        { id: 'ch1', title: 'Challenge 1', description: 'Build DFA for binary strings ending with "0"', targetLanguage: 'ending with 0', isCompleted: false },
-        { id: 'ch2', title: 'Challenge 2', description: 'Build DFA for strings containing "01"', targetLanguage: 'contains 01', isCompleted: false },
-        { id: 'ch3', title: 'Challenge 3', description: 'Build NFA for "starts with 0 and ends with 1"', targetLanguage: 'starts 0, ends 1', isCompleted: false },
+        { id: 'ch1', title: 'Challenge 1: Binary End', description: 'Build a DFA that accepts binary strings ending with "0". Hint: You need at least 2 states.', targetLanguage: 'ending with 0', isCompleted: false },
+        { id: 'ch2', title: 'Challenge 2: Substring Search', description: 'Build a DFA for strings containing the substring "01". Tip: This is a 3-state machine.', targetLanguage: 'contains 01', isCompleted: false },
+        { id: 'ch3', title: 'Challenge 3: Edge NFA', description: 'Build an NFA for "starts with 0 and ends with 1". Note: Use branching for NFA power!', targetLanguage: 'starts 0, ends 1', isCompleted: false },
+        { id: 'ch4', title: 'Challenge 4: Even Zeros', description: 'Build a DFA for strings with an even number of 0s. Tip: Use a "loop-back" strategy.', targetLanguage: 'even number of 0s', isCompleted: false },
+        { id: 'ch5', title: 'Challenge 5: Modulo 3', description: 'Build a DFA that accepts binary numbers divisible by 3. High difficulty!', targetLanguage: 'binary mod 3 == 0', isCompleted: false },
+        { id: 'ch6', title: 'Challenge 6: Epsilon Jump', description: 'Build an ε-NFA for (0|1)*0. Use at least one epsilon transition.', targetLanguage: '(0|1)*0', isCompleted: false },
       ],
 
       setAutomatonType: (type) => set((state) => ({ automaton: { ...state.automaton, type } })),
