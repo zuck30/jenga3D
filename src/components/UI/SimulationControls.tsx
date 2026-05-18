@@ -1,8 +1,9 @@
 import React from 'react';
 import { useStore } from '../../store/useStore';
-import { Play, SkipForward, RotateCcw, AlertCircle, CheckCircle2, XCircle } from 'lucide-react';
+import { Play, SkipForward, RotateCcw, AlertCircle, CheckCircle2, XCircle, ChevronDown, ChevronUp } from 'lucide-react';
 
 const SimulationControls: React.FC = () => {
+  const [isCollapsed, setIsCollapsed] = React.useState(false);
   const {
     simulation,
     setSimulationInput,
@@ -21,16 +22,24 @@ const SimulationControls: React.FC = () => {
   const totalSteps = simulation.inputString.length;
 
   return (
-    <div className="fixed top-6 left-6 flex flex-col gap-3 z-50">
-      <div className="bg-slate-900/90 backdrop-blur-md border border-slate-700 rounded-2xl p-4 shadow-2xl w-80">
-        <div className="flex items-center justify-between mb-3">
+    <div className="fixed top-6 left-6 flex flex-col gap-3 z-50 max-w-[calc(100vw-3rem)]">
+      <div className={`bg-slate-900/90 backdrop-blur-md border border-slate-700 rounded-2xl p-4 shadow-2xl transition-all duration-300 ${isCollapsed ? 'w-12 h-12 overflow-hidden' : 'w-80'}`}>
+        <div className="flex items-center justify-between mb-3 min-w-[280px]">
           <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
             <Play size={14} className="text-green-500" />
             Simulation
           </h3>
-          <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${isDFA ? 'bg-blue-500/20 text-blue-400' : 'bg-purple-500/20 text-purple-400'}`}>
-            {automaton.type}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${isDFA ? 'bg-blue-500/20 text-blue-400' : 'bg-purple-500/20 text-purple-400'}`}>
+                {automaton.type}
+            </span>
+            <button
+                onClick={() => setIsCollapsed(!isCollapsed)}
+                className="md:hidden p-1 hover:bg-slate-800 rounded-lg"
+            >
+                {isCollapsed ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
+            </button>
+          </div>
         </div>
 
         <div className="space-y-4">

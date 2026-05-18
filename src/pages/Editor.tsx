@@ -6,6 +6,7 @@ import SimulationControls from '../components/UI/SimulationControls';
 import AchievementNotify from '../components/UI/AchievementNotify';
 import ChallengeSidebar from '../components/UI/ChallengeSidebar';
 import AchievementsGallery from './AchievementsGallery';
+import HelpModal from '../components/UI/HelpModal';
 import { useStore } from '../store/useStore';
 
 const ModeIndicator: React.FC = () => {
@@ -24,6 +25,7 @@ const ModeIndicator: React.FC = () => {
 const Editor: React.FC = () => {
   const setMode = useStore(s => s.setMode);
   const [showGallery, setShowGallery] = useState(false);
+  const [showHelp, setShowHelp] = useState(true);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -58,11 +60,15 @@ const Editor: React.FC = () => {
       {/* UI Overlays */}
       <SimulationControls />
       <PropertiesPanel />
-      <Toolbar onShowGallery={() => setShowGallery(true)} />
+      <Toolbar
+        onShowGallery={() => setShowGallery(true)}
+        onShowHelp={() => setShowHelp(true)}
+      />
       <AchievementNotify />
       <ChallengeSidebar />
 
       {showGallery && <AchievementsGallery onClose={() => setShowGallery(false)} />}
+      {showHelp && <HelpModal onClose={() => setShowHelp(false)} />}
 
       {/* Brand / Title */}
       <div className="fixed bottom-6 right-8 flex flex-col items-end pointer-events-none">

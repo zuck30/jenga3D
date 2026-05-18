@@ -10,7 +10,8 @@ import {
   Upload,
   Share2,
   Trophy,
-  Zap
+  Zap,
+  HelpCircle
 } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { saveAutomatonToFile } from '../../utils/saveLoad';
@@ -18,9 +19,10 @@ import { generateAchievementCard, downloadDataUrl } from '../../utils/cardGenera
 
 interface ToolbarProps {
   onShowGallery?: () => void;
+  onShowHelp?: () => void;
 }
 
-const Toolbar: React.FC<ToolbarProps> = ({ onShowGallery }) => {
+const Toolbar: React.FC<ToolbarProps> = ({ onShowGallery, onShowHelp }) => {
   const mode = useStore(s => s.mode);
   const setMode = useStore(s => s.setMode);
   const simulation = useStore(s => s.simulation);
@@ -51,8 +53,8 @@ const Toolbar: React.FC<ToolbarProps> = ({ onShowGallery }) => {
   ];
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 bg-slate-900/80 backdrop-blur-md border border-slate-700 rounded-2xl shadow-2xl z-50">
-      <div className="flex items-center gap-1 pr-4 border-r border-slate-700">
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex flex-wrap items-center justify-center gap-2 px-4 py-2 bg-slate-900/80 backdrop-blur-md border border-slate-700 rounded-2xl shadow-2xl z-50 w-max max-w-[95vw]">
+      <div className="flex items-center gap-1 pr-2 md:pr-4 border-r border-slate-700">
         {tools.map((tool) => (
           <button
             key={tool.id}
@@ -100,6 +102,14 @@ const Toolbar: React.FC<ToolbarProps> = ({ onShowGallery }) => {
           title="Achievement Gallery"
         >
           <Trophy size={20} />
+        </button>
+
+        <button
+          onClick={onShowHelp}
+          className="p-2 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-slate-200"
+          title="Help & Guide"
+        >
+          <HelpCircle size={20} />
         </button>
 
         <div className="group relative">
