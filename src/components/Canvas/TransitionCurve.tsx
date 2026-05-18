@@ -4,13 +4,14 @@ import { Html, QuadraticBezierLine } from '@react-three/drei';
 import * as THREE from 'three';
 import { Transition } from '../../types/automaton';
 import { useStore } from '../../store/useStore';
+import Particle from './Particle';
 
 interface TransitionCurveProps {
   transition: Transition;
 }
 
 const TransitionCurve: React.FC<TransitionCurveProps> = ({ transition }) => {
-  const { automaton, selectedElement, setSelectedElement, mode, deleteTransition } = useStore();
+  const { automaton, selectedElement, setSelectedElement, mode, deleteTransition, simulation } = useStore();
 
   const sourceState = automaton.states.find((s) => s.id === transition.sourceId);
   const targetState = automaton.states.find((s) => s.id === transition.targetId);
@@ -19,6 +20,7 @@ const TransitionCurve: React.FC<TransitionCurveProps> = ({ transition }) => {
 
   const isSelected = selectedElement?.id === transition.id;
   const isSelfLoop = transition.sourceId === transition.targetId;
+  const isActive = simulation.activeTransitions.includes(transition.id);
 
   const { start, end, mid } = useMemo(() => {
     const s = new THREE.Vector3(...sourceState.position);
@@ -67,12 +69,22 @@ const TransitionCurve: React.FC<TransitionCurveProps> = ({ transition }) => {
         start={start}
         end={end}
         mid={mid}
-        color={isSelected ? "#facc15" : (transition.label === 'ε' ? "#a855f7" : "#94a3b8")}
-        lineWidth={2}
+        color={isSelected ? "#facc15" : (isActive ? "#fb923c" : (transition.label === 'ε' ? "#a855f7" : "#94a3b8"))}
+        lineWidth={isActive ? 4 : 2}
         dashed={transition.label === 'ε'}
         dashScale={2}
         gapSize={0.5}
       />
+
+      {isActive && (
+        <Particle
+          key={simulation.currentIndex}
+          start={[start.x, start.y, start.z]}
+          end={[end.x, end.y, end.z]}
+          mid={[mid.x, mid.y, mid.z]}
+          duration={0.5}
+        />
+      )}
 
       {/* Invisible thicker line for better click detection */}
       <QuadraticBezierLine

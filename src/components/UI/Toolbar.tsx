@@ -31,7 +31,10 @@ const Toolbar: React.FC<ToolbarProps> = ({ onShowGallery, onShowHelp }) => {
   const runNFAToDFA = useStore(s => s.runNFAToDFA);
   const runEliminateEpsilon = useStore(s => s.runEliminateEpsilon);
   const runMinimizeDFA = useStore(s => s.runMinimizeDFA);
+  const createFromRegex = useStore(s => s.createFromRegex);
   const automaton = useStore(s => s.automaton);
+
+  const [regex, setRegex] = React.useState('');
 
   const handleSave = () => {
       saveAutomatonToFile(automaton);
@@ -137,6 +140,24 @@ const Toolbar: React.FC<ToolbarProps> = ({ onShowGallery, onShowHelp }) => {
         >
           <Share2 size={20} />
         </button>
+
+        <div className="w-px h-6 bg-slate-700 mx-2" />
+
+        <div className="flex items-center gap-2 bg-slate-800/50 rounded-xl px-2 py-1 border border-slate-700">
+           <input
+              type="text"
+              placeholder="Regex (e.g. (0|1)*0)"
+              value={regex}
+              onChange={(e) => setRegex(e.target.value)}
+              className="bg-transparent border-none focus:outline-none text-[10px] text-slate-300 w-24"
+           />
+           <button
+            onClick={() => createFromRegex(regex)}
+            className="text-[10px] font-bold text-blue-400 hover:text-blue-300 transition-colors uppercase"
+           >
+             Build
+           </button>
+        </div>
       </div>
     </div>
   );
