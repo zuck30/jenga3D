@@ -56,9 +56,24 @@ const StateSphere: React.FC<StateSphereProps> = ({ state }) => {
     setSelectedElement({ id: state.id, type: 'state' });
   };
 
+  const groupRef = useRef<THREE.Group>(null!);
+
   return (
     <>
-      <group position={state.position}>
+      {isSelected && mode === 'select' ? (
+        <TransformControls
+          object={groupRef.current}
+          mode="translate"
+          onObjectChange={() => {
+            if (groupRef.current) {
+              const { x, y, z } = groupRef.current.position;
+              updateState(state.id, { position: [x, y, z] });
+            }
+          }}
+        />
+      ) : null}
+
+      <group ref={groupRef} position={state.position}>
         <Sphere
           ref={meshRef}
           args={[0.5, 32, 32]}
@@ -88,7 +103,7 @@ const StateSphere: React.FC<StateSphereProps> = ({ state }) => {
 
         <Html position={[0, 0.8, 0]} center distanceFactor={10}>
           <div className={`
-            px-2 py-0.5 rounded bg-black/60 text-white text-xs font-mono select-none pointer-events-none
+            px-2 py-0.5 rounded bg-black/60 text-white text-xs font-mono select-none cursor-pointer
             border ${isSelected ? 'border-yellow-400' : 'border-white/20'}
           `}>
             {state.name}
@@ -100,19 +115,6 @@ const StateSphere: React.FC<StateSphereProps> = ({ state }) => {
             <pointLight distance={3} intensity={5} color="#fb923c" />
         )}
       </group>
-
-      {isSelected && mode === 'select' && (
-        <TransformControls
-          position={state.position}
-          mode="translate"
-          onObjectChange={() => {
-            if (meshRef.current) {
-                const pos = meshRef.current.parent!.position;
-                updateState(state.id, { position: [pos.x, pos.y, pos.z] });
-            }
-          }}
-        />
-      )}
     </>
   );
 };

@@ -13,6 +13,7 @@ interface AppState {
   simulation: {
     isRunning: boolean;
     currentStates: string[];
+    activeTransitions: string[]; // IDs of transitions currently being traversed
     inputString: string;
     currentIndex: number;
     result: 'accepted' | 'rejected' | 'pending' | null;
@@ -62,6 +63,7 @@ export const useStore = create<AppState>()(
       simulation: {
         isRunning: false,
         currentStates: [],
+        activeTransitions: [],
         inputString: '',
         currentIndex: 0,
         result: null,
@@ -172,6 +174,7 @@ export const useStore = create<AppState>()(
             ...state.simulation,
             isRunning: true,
             currentStates: initialStates,
+            activeTransitions: [],
             currentIndex: 0,
             result: 'pending',
           }
@@ -202,12 +205,19 @@ export const useStore = create<AppState>()(
         }
 
         const char = simulation.inputString[simulation.currentIndex];
+
+        // Find transitions that are being triggered
+        const triggeredTransitions = automaton.transitions.filter(t =>
+            simulation.currentStates.includes(t.sourceId) && t.label === char
+        );
+
         const nextStates = getNextStates(simulation.currentStates, char, automaton.transitions);
 
         return {
             simulation: {
                 ...simulation,
                 currentStates: nextStates,
+                activeTransitions: triggeredTransitions.map(t => t.id),
                 currentIndex: simulation.currentIndex + 1,
             }
         };
@@ -218,6 +228,7 @@ export const useStore = create<AppState>()(
             ...state.simulation,
             isRunning: false,
             currentStates: [],
+            activeTransitions: [],
             currentIndex: 0,
             result: null,
         }

@@ -75,7 +75,7 @@ const SceneContent: React.FC = () => {
 const Scene3D: React.FC = () => {
   return (
     <div className="w-full h-full bg-slate-900">
-      <Canvas shadows>
+      <Canvas shadows gl={{ preserveDrawingBuffer: true }}>
         <SceneContent />
       </Canvas>
     </div>
